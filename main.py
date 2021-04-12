@@ -13,6 +13,9 @@ second_starts = False
 player_name_1 = None
 player_name_2 = None
 
+player_score_1 = 0
+player_score_2 = 0
+
 board = np.zeros((3, 3))
 
 # ======== Print Messages ===========
@@ -38,6 +41,8 @@ def print_ending():
         print(f"{winner_name} wins!")
     else:
         print("Tie!")
+    print()
+    print(f"Scores -- {player_name_1}: {player_score_1}, {player_name_2}: {player_score_2}")
 
 # ====== User Input ========
 
@@ -82,6 +87,7 @@ def start_singleplayer_game():
 
 def start_multiplayer_game():
     """Core funcion of game for two players where each can decide where to place symbols"""
+    # Reset Game logic
     gm_over = False
     first_player = not second_starts
 
@@ -189,13 +195,17 @@ def check_game_over():
 def is_complete(line):
     global hasWinner
     global winner_name
+    global player_score_1
+    global player_score_2
 
     if np.all(line == 1):
         hasWinner = True
         winner_name = player_name_1
+        player_score_1 += 1
     elif np.all(line == 2):
         hasWinner = True
         winner_name = player_name_2
+        player_score_2 += 1
 
     return hasWinner
 
