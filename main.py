@@ -139,7 +139,7 @@ def make_comp_move(first_player, level):
 
     add_symbol(symbol, pos)
     print()
-    print(f"{player_name_2} has moved an 'O' to position {pos}")
+    print(f"{player_name_1 if first_player else player_name_2} has moved an '{symbol}' to position {pos}")
     draw_board()
     return check_game_over(board)
 
