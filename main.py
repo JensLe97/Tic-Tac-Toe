@@ -11,6 +11,9 @@ with_turns = False
 # True if in this round the second player starts the game
 second_starts = False
 
+# PC vs PC?
+pc_vs_pc = False
+
 # Player information
 player_name_1 = None
 player_name_2 = None
@@ -24,6 +27,8 @@ board = np.zeros((3, 3))
 # medium = 2
 # hard = 3 
 level = 0
+level_p1 = 0
+level_p2 = 0
 
 # ======== Print Messages ===========
 def print_welcome():
@@ -93,7 +98,7 @@ def name_question(question):
 
 # ----------- Single Player Game ----------------
 
-def start_singleplayer_game():
+def start_singleplayer_game(gmode):
     """Core funcion of game implements the tic tac toe strategy (minmax algorithm)"""
     gm_over = False
     # Human player starts
@@ -104,29 +109,33 @@ def start_singleplayer_game():
     while not gm_over:
         # Human's turn
         if first_player:
-            gm_over = make_human_move(first_player)
+            gm_over = make_comp_move(first_player, level_p1) if pc_vs_pc else make_human_move(first_player)
         # Computer's turn
         else:
-            gm_over = make_comp_move()
-        
+            if gmode == 1:
+                gm_over = make_comp_move(first_player, level)
+            else:
+                gm_over = make_comp_move(first_player, level_p2)
+
         first_player = not first_player
 
-def make_comp_move():
-    symbol = "O"
+def make_comp_move(first_player, level):
+    # own symbol
+    symbol = "O" if not first_player else "X"
     # Easy
     if level == 1:
-       pos = random.choice(get_free_moves())
+       pos = random.choice(get_free_moves(board))
     # Medium
     elif level == 2:
-        # TODO: Change into a medium mode 
         # Computer blocks and choses corners > middle > edge
         pos = medium_move()
-    # Hard (undefeatable)
+    # Hard (Undefeatable)
     elif level == 3:
-        if len(get_free_moves) == 9:
-            pos = random.choice(get_free_moves())
+        if len(get_free_moves(board)) == 9:
+            pos = random.choice(get_free_moves(board))
         else:
-            pos = minimax()
+            board_copy = np.copy(board)
+            pos = minimax(board_copy, symbol, symbol)['pos']
 
     add_symbol(symbol, pos)
     print()
@@ -135,7 +144,7 @@ def make_comp_move():
     return check_game_over(board)
 
 def medium_move():
-    free_moves = get_free_moves()
+    free_moves = get_free_moves(board)
 
     # Check if any player is about to win with the next move: block it and take the win, respectively
     # 2 = "O" first: Winning has higher priority than blocking
@@ -144,7 +153,7 @@ def medium_move():
             board_copy = np.copy(board)
             board_pos = pos - 1
             board_copy[board_pos // 3][board_pos % 3] = sym
-            if check_game_over(board_copy, False):
+            if check_game_over(board_copy, False, False):
                 return pos
     
     # Choose a random corner
@@ -161,12 +170,50 @@ def medium_move():
     if edges:
         return random.choice(edges)      
 
-def minimax():
-    # TODO: Implements the minimax algorithm to maximize the computers chance of winning
+def minimax(board_copy, symbol, own_symbol):
+    # Implements the minimax algorithm to maximize the computers chance of winning
     # Computer is player 2 = "O"
-    my_sym = "O"
-    other_sym = "X"
-    return random.choice(get_free_moves())
+    # symbol always equals "O"
+    max_sym = own_symbol 
+    other_sym = "X" if symbol == "O" else "O"
+    free_moves = get_free_moves(board_copy)
+
+    global hasWinner
+    global winner_name
+
+    # Check if game is over, set a winner but do not increase player score
+    check_game_over(board_copy, True, False)
+    if winner_name == (player_name_1 if other_sym == "X" else player_name_2):
+        return {'pos': None, 'score': 1 * (len(free_moves) + 1) if other_sym == max_sym else -1 * (len(free_moves) + 1)}
+    elif not free_moves:
+        return {'pos': None, 'score': 0}
+    
+    # Game is not over
+    # Max max_sym starting from -infinity
+    if symbol == max_sym:
+        best = {'pos': None, 'score': np.NINF}
+    # Min other player starting from infinity
+    else:
+        best = {'pos': None, 'score': np.Inf}
+    
+    # Try all possible moves and set best accordingly
+    for free_move in free_moves:
+        board_pos = free_move - 1
+        board_copy[board_pos // 3][board_pos % 3] = 2 if symbol == "O" else 1
+        sim_score = minimax(board_copy, other_sym, own_symbol)
+
+        # Undo the move
+        board_copy[board_pos // 3][board_pos % 3] = 0
+        reset_game(False)
+        sim_score['pos'] = free_move
+
+        if symbol == max_sym:
+            if sim_score['score'] > best['score']:
+                best = sim_score
+        else:
+            if sim_score['score'] < best['score']:
+                best = sim_score
+    return best
 
 # ------------ Multiplayer Game --------------
 
@@ -187,7 +234,7 @@ def start_multiplayer_game():
 
 # --------- Both Single and Multiplayer -------------
 
-def get_free_moves():
+def get_free_moves(board):
     """ Returns a list of indices that can be chosen for a valid move"""
     # 2 np arrays containing the indices of row and column
     indices = np.where(board == 0)
@@ -211,14 +258,17 @@ def make_human_move(first_player):
     draw_board()
     return check_game_over(board)
 
-def reset_game():
+def reset_game(reset_board=True):
     # Reset winner status
     global hasWinner
+    global winner_name
     hasWinner = False
+    winner_name = None
 
     # Initialize board and reset, respectively
-    global board
-    board = np.zeros((3, 3))
+    if reset_board:
+        global board
+        board = np.zeros((3, 3))
 
 def draw_board():
     size = board.shape[0]
@@ -273,32 +323,32 @@ def add_symbol(symbol, pos):
     
     return True
 
-def check_game_over(board, set_winner=True):
+def check_game_over(board, set_winner=True, change_score=True):
     """ Checks anyone has won the game or if it is a tie in which case True is returned
         set_winner allows to directly define the winner / a tie and end the game """
     size = board.shape[0]
     # Check all rows
     for i in range(size):
-        if is_complete(board[i], set_winner):
+        if is_complete(board[i], set_winner, change_score):
             return True
     
     # Check all columns
     for i in range(size):
-        if is_complete(np.transpose(board)[i], set_winner):
+        if is_complete(np.transpose(board)[i], set_winner, change_score):
             return True
 
     # Check diagonals
-    if (is_complete(np.array([board[0][0], board[1][1], board[2][2]]), set_winner) 
-     or is_complete(np.array([board[2][0], board[1][1], board[0][2]]), set_winner)):
+    if (is_complete(np.array([board[0][0], board[1][1], board[2][2]]), set_winner, change_score) 
+     or is_complete(np.array([board[2][0], board[1][1], board[0][2]]), set_winner, change_score)):
         return True
 
     # Check if all fields are filled (no free moves left) -> Tie
-    if not get_free_moves():
+    if not get_free_moves(board):
         return True
 
     return False
 
-def is_complete(line, set_winner):
+def is_complete(line, set_winner, change_score):
     """ Returns true if the given array is full of one symbol type
         If set_winner is True, the winner data is set acordingly"""
     global hasWinner
@@ -311,13 +361,15 @@ def is_complete(line, set_winner):
             return True
         hasWinner = True
         winner_name = player_name_1
-        player_score_1 += 1
+        if change_score:
+            player_score_1 += 1
     elif np.all(line == 2):
         if not set_winner:
             return True
         hasWinner = True
         winner_name = player_name_2
-        player_score_2 += 1
+        if change_score:
+            player_score_2 += 1
 
     return hasWinner
 
@@ -326,13 +378,16 @@ def is_complete(line, set_winner):
 print_welcome()
 print_rules()
 
-gmode = range_question("Choose '1' to play against the computer or '2' to play against another player: ", 2)
+gmode = range_question("Choose '1' to play against the computer, '2' to play against another player or '3' if 2 PCs shall play against each other: ", 3)
 
 with_turns = yes_no_question("Take turns at every new game? (y/n): ")
 
 # Player can choose a difficulty in single player mode
 if gmode == 1:
     level = range_question("Select a level number (1 = 'easy', 2 = 'medium' or 3 = 'hard'): ", 3)
+if gmode == 3:
+    level_p1 = range_question("Select a level number for player 1 (1 = 'easy', 2 = 'medium' or 3 = 'hard'): ", 3)
+    level_p2 = range_question("Select a level number for player 2 (1 = 'easy', 2 = 'medium' or 3 = 'hard'): ", 3)
 
 # Choose Player Names at the beginning
 player_name_1 = name_question("Name of player 1 (X): ")
@@ -341,13 +396,18 @@ player_name_2 = name_question("Name of player 2 (O): ")
 # Replay until chosen to stop 
 while True:
     if gmode == 1:
-        start_singleplayer_game()
+        start_singleplayer_game(gmode)
     elif gmode == 2:
         start_multiplayer_game()
+    elif gmode == 3:
+        pc_vs_pc = True
+        start_singleplayer_game(gmode)
 
     print_ending()
 
+    # comment out wheter to manualy choose to play again
     replay = yes_no_question("Play again (y/n)?: ")
+    # replay = "y"
 
     if replay == "n":
         break
