@@ -37,7 +37,8 @@ def make_comp_move(first_player, level):
         pos = medium_move()
     # Hard (Undefeatable)
     elif level == 3:
-        if len(gl.get_free_moves(gv.board)) == 9:
+        # First two moves are chosen randomly so the human has a chance to win
+        if len(gl.get_free_moves(gv.board)) in [8, 9]:
             pos = random.choice(gl.get_free_moves(gv.board))
         else:
             board_copy = np.copy(gv.board)
