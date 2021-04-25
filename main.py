@@ -4,9 +4,8 @@ import user_input as ui
 import singleplayer as sp
 import multiplayer as mp
 
-# ======= Start of the game ========
-if __name__ == '__main__':
-    gv.init()
+def play_console():
+    # ======= Start of the console game ========
     pm.print_welcome()
     pm.print_rules()
 
@@ -52,5 +51,15 @@ if __name__ == '__main__':
 
         if with_turns == "y":
             second_starts = not second_starts
+    # ======= End of the console Game ==========
 
-# ======= End of the Game ==========
+# Select GUI or console
+with_gui = True
+
+if __name__ == '__main__':
+    gv.init()
+    if with_gui:
+        from main_menu import menu_fun
+        menu_fun()
+    else:
+        play_console()
