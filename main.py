@@ -1,8 +1,15 @@
+import os
+import sys
+
+path = os.path.abspath(os.path.join('..'))
+if path not in sys.path:
+    sys.path.append(path)
+
 import global_vars as gv
-import print_messages as pm
-import user_input as ui
-import singleplayer as sp
-import multiplayer as mp
+import console.print_messages as pm
+import console.user_input as ui
+import console.singleplayer as sp
+import console.multiplayer as mp
 
 def play_console():
     # ======= Start of the console game ========
@@ -59,7 +66,7 @@ with_gui = True
 if __name__ == '__main__':
     gv.init()
     if with_gui:
-        from main_menu import menu_fun
+        from graphic_ui.menus.main_menu import menu_fun
         menu_fun()
     else:
         play_console()

@@ -1,6 +1,7 @@
 import pygame
 import global_vars as gv
-from gui_consts import CIRCLE_COLOR, CROSS_COLOR
+from graphic_ui.gui_consts import CIRCLE_COLOR, CROSS_COLOR
+
 pygame.font.init()
 
 COLOR_LIGHT = (102, 204, 255)

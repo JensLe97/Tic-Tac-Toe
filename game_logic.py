@@ -1,6 +1,6 @@
 # --------- Both Single and Multiplayer -------------
 import global_vars as gv
-import user_input as ui
+import console.user_input as ui
 import numpy as np
 
 def get_free_moves(board):

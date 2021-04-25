@@ -4,10 +4,10 @@ import pygame
 pygame.init()
 import pygame_menu
 import sys
-from gui_consts import *
+from graphic_ui.gui_consts import *
+from graphic_ui.draw_text import *
 import global_vars as gv
 import game_logic as gl
-from draw_text import *
 import numpy as np
 
 # ========= PyGame Initialization ==========
@@ -94,7 +94,7 @@ def reset_scores():
 
 def play_gui(second_starts):
     # Disable the main menu loop
-    from main_menu import menu
+    from graphic_ui.menus.main_menu import menu
     global menu
     menu.disable()
     menu.full_reset()

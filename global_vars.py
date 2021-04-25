@@ -10,9 +10,9 @@ def init():
 
     # Player information
     global player_name_1
-    player_name_1 = None
+    player_name_1 = "J"
     global player_name_2
-    player_name_2 = None
+    player_name_2 = "L"
 
     global player_score_1
     player_score_1 = 0
