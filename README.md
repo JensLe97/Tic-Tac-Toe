@@ -1,2 +1,2 @@
 # Tic-Tac-Toe
-Simple console game of "Tic Tac Toe" for 1 or 2 players
+Simple console and gui game of "Tic Tac Toe" for 1 or 2 players
