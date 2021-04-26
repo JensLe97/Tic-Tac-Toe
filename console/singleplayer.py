@@ -30,7 +30,7 @@ def make_comp_move(first_player, level):
     symbol = "O" if not first_player else "X"
     # Easy
     if level == 1:
-       pos = random.choice(gl.get_free_moves(gv.board))
+       pos = random_move()
     # Medium
     elif level == 2:
         # Computer blocks and choses corners > middle > edge
@@ -39,7 +39,7 @@ def make_comp_move(first_player, level):
     elif level == 3:
         # First two moves are chosen randomly so the human has a chance to win
         if len(gl.get_free_moves(gv.board)) in [8, 9]:
-            pos = random.choice(gl.get_free_moves(gv.board))
+            pos = random_move()
         else:
             board_copy = np.copy(gv.board)
             pos = minimax(board_copy, symbol, symbol)['pos']
@@ -49,6 +49,9 @@ def make_comp_move(first_player, level):
     print(f"{gv.player_name_1 if first_player else gv.player_name_2} has moved an '{symbol}' to position {pos}")
     gl.draw_board()
     return gl.check_game_over(gv.board)
+
+def random_move():
+    return random.choice(gl.get_free_moves(gv.board))
 
 def medium_move():
     free_moves = gl.get_free_moves(gv.board)

@@ -16,8 +16,7 @@ def menu_fun():
     menu.add.button("Two Players", multiplayer_menu)
     menu.add.button("Options", options_menu)
     menu.add.button("Credits", credits_menu)
-    menu.add.button('Quit', pygame_menu.events.EXIT)
+    menu.add.button("Quit", pygame_menu.events.EXIT)
 
     if menu.is_enabled():
         menu.mainloop(screen)
-

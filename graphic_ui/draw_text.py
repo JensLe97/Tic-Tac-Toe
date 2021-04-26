@@ -1,15 +1,14 @@
 import pygame
 import global_vars as gv
-from graphic_ui.gui_consts import CIRCLE_COLOR, CROSS_COLOR
+from graphic_ui.gui_consts import COLORS
 
 pygame.font.init()
+font = pygame.font.SysFont('cambria', 35)
 
 COLOR_LIGHT = (102, 204, 255)
 COLOR_DARK = (51, 153, 255)
 COLOR_CLICKED = (0, 0, 200)
 TEXT_COLOR = (0, 0, 100)
-
-font = pygame.font.SysFont('cambria', 35)
 
 def draw_button(text, screen, rect):
     img = font.render(text, True, TEXT_COLOR)
@@ -18,7 +17,7 @@ def draw_button(text, screen, rect):
         pygame.draw.rect(screen, COLOR_CLICKED, rect)
         # Pause to show the clicked button
         pygame.display.update()
-        pygame.time.delay(50)
+        pygame.time.delay(40)
     # Mouse hovers over button
     elif check_mouse_on_button(rect):
         pygame.draw.rect(screen, COLOR_DARK, rect)
@@ -45,14 +44,14 @@ def draw_scores(screen, rect, first_player):
     scores = font.render(f" {gv.player_name_1}: {gv.player_score_1}      {gv.player_name_2}: {gv.player_score_2}", True, TEXT_COLOR)
     if first_player:
         font.set_underline(True)
-        x_sym = font.render("X", True, CROSS_COLOR)
+        x_sym = font.render("X", True, gv.colors[0])
         font.set_underline(False)
-        o_sym = font.render("O", True, CIRCLE_COLOR)
+        o_sym = font.render("O", True, gv.colors[1])
     else:
         font.set_underline(True)
-        o_sym = font.render("O", True, CIRCLE_COLOR)
+        o_sym = font.render("O", True, gv.colors[1])
         font.set_underline(False)
-        x_sym = font.render("X", True, CROSS_COLOR)
+        x_sym = font.render("X", True, gv.colors[0])
 
     screen.blit(scores, (rect.x + (rect.width - scores.get_width()) // 2, rect.y + (rect.height - scores.get_height()) // 2))
     screen.blit(x_sym, (rect.x - x_sym.get_width() + (rect.width - scores.get_width()) // 2, rect.y + (rect.height - scores.get_height()) // 2))
