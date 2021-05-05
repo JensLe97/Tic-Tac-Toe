@@ -1,7 +1,4 @@
-from os import environ
-environ['PYGAME_HIDE_SUPPORT_PROMPT'] = 'HIDE'
 import pygame
-pygame.init()
 import pygame_menu
 import sys
 from graphic_ui.gui_consts import *
@@ -16,6 +13,8 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Tic Tac Toe")
 clock = pygame.time.Clock()
 
+bg_image = pygame.image.load("images/bg_image.jpg")
+
 # Settings for buttons and text location
 replay_button = pygame.Rect(WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT // 2 - BUTTON_HEIGHT // 2, BUTTON_WIDTH, BUTTON_HEIGHT)
 back_button =   pygame.Rect(WIDTH // 1.11 - BACK_BUTTON_WIDTH // 2, HEIGHT // 20 - BACK_BUTTON_HEIGHT // 2, BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT)
@@ -25,7 +24,7 @@ winner_text =   pygame.Rect(WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT // 3 - BUTTON
 scores_text =   pygame.Rect(WIDTH // 2 - SCORE_WIDTH // 2, HEIGHT - SCORE_MARGIN - SCORE_HEIGHT // 2, SCORE_WIDTH, SCORE_HEIGHT)
 
 def draw_window(first_player):
-    screen.fill(BG_COLOR)
+    screen.blit(bg_image, (0, 0))
     draw_board()
     draw_symbols()
     draw_scores(screen, scores_text, first_player)
@@ -177,6 +176,8 @@ def play_gui(single_mode):
                 gm_over, current_sym = make_comp_move_gui(current_sym, gv.level)
                 pygame.display.update()
                 pygame.time.wait(400)
+                if gv.sound_on:
+                    pygame.mixer.Sound.play(DRAW)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -198,6 +199,8 @@ def play_gui(single_mode):
                     clicked = False
                     result = make_human_move_gui(event, gm_over, current_sym)
                     if result:
+                        if gv.sound_on:
+                            pygame.mixer.Sound.play(DRAW)
                         gm_over, current_sym = result            
 
         draw_window(current_sym)
@@ -214,14 +217,22 @@ def play_gui(single_mode):
             draw_winner_name(gv.winner_name + " wins!" if gv.hasWinner else "Tie!", screen, winner_text)
             draw_button("Play Again", screen, replay_button)
             if gv.level == 4 or check_clicked(replay_button):
+                if gv.level != 4 and gv.sound_on:
+                    pygame.mixer.Sound.play(CLICK)
                 play_gui(single_mode)
 
         if check_clicked(back_button):
             reset_scores()
+            if gv.sound_on:
+                pygame.mixer.Sound.play(CLICK)
             menu.enable()
             return
         
         if check_clicked(reset_button):
             gl.reset_game()
+            if gv.sound_on:
+                pygame.mixer.Sound.play(CLICK)
+                pygame.display.update()
+                pygame.time.wait(500)            
 
         pygame.display.update()

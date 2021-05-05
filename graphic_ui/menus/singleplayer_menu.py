@@ -1,5 +1,5 @@
 from graphic_ui.gui_mode import play_gui
-from graphic_ui.gui_consts import WIDTH, HEIGHT, COLORS
+from graphic_ui.gui_consts import WIDTH, HEIGHT, COLORS, THEME, ENGINE
 import global_vars as gv
 import pygame
 import pygame_menu
@@ -13,6 +13,7 @@ def set_player_2_name(name):
 def set_level(selected_level, lvl_num):
     gv.level = lvl_num
     if lvl_num == 4:
+        # Insert selectors for the PCs difficulties
         s1 = singleplayer_menu.add.selector(title="Level PC 1:  ", items=levels[:-1], onchange=set_level_p1, selector_id="lvlp1")
         singleplayer_menu.move_widget_index(s1, 3)
         s2 = singleplayer_menu.add.selector(title="Level PC 2:  ", items=levels[:-1], onchange=set_level_p2, selector_id="lvlp2")
@@ -39,10 +40,10 @@ def set_colors(selected_first, color_num):
     elif color_num == 2:
         gv.colors = COLORS[4:]
 
-singleplayer_menu = pygame_menu.Menu("One Player", WIDTH, HEIGHT, theme=pygame_menu.themes.THEME_BLUE)   
+singleplayer_menu = pygame_menu.Menu("One Player", WIDTH, HEIGHT, theme=THEME)
 
 singleplayer_menu.add.text_input("First Player (Me):  ", default="Player 1", maxchar=8, input_type=pygame_menu.locals.INPUT_TEXT, onchange=set_player_1_name)
-singleplayer_menu.add.text_input("Opponent:  ", default="Player 2", maxchar=8, input_type=pygame_menu.locals.INPUT_TEXT, onchange=set_player_2_name)
+singleplayer_menu.add.text_input("Opponent:  "         , default="Player 2", maxchar=8, input_type=pygame_menu.locals.INPUT_TEXT, onchange=set_player_2_name)
 
 levels = [("Easy", 1),
          ("Medium", 2),

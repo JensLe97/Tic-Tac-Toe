@@ -1,14 +1,7 @@
 import pygame
+import pygame_menu
 import global_vars as gv
-from graphic_ui.gui_consts import COLORS
-
-pygame.font.init()
-font = pygame.font.SysFont('cambria', 35)
-
-COLOR_LIGHT = (102, 204, 255)
-COLOR_DARK = (51, 153, 255)
-COLOR_CLICKED = (0, 0, 200)
-TEXT_COLOR = (0, 0, 100)
+from graphic_ui.gui_consts import font, COLOR_LIGHT, COLOR_DARK, COLOR_CLICKED, TEXT_COLOR
 
 def draw_button(text, screen, rect):
     img = font.render(text, True, TEXT_COLOR)

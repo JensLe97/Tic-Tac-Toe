@@ -1,5 +1,5 @@
 from graphic_ui.gui_mode import play_gui
-from graphic_ui.gui_consts import WIDTH, HEIGHT, COLORS
+from graphic_ui.gui_consts import WIDTH, HEIGHT, COLORS, THEME, ENGINE
 import global_vars as gv
 import pygame
 import pygame_menu
@@ -21,10 +21,11 @@ def set_colors(selected_first, color_num):
     elif color_num == 2:
         gv.colors = COLORS[4:]
 
-multiplayer_menu = pygame_menu.Menu("Two Players", WIDTH, HEIGHT, theme=pygame_menu.themes.THEME_BLUE)   
+multiplayer_menu = pygame_menu.Menu("Two Players", WIDTH, HEIGHT, theme=THEME)
+
 
 multiplayer_menu.add.text_input("First Player:  ", default="Player 1", maxchar=8, input_type=pygame_menu.locals.INPUT_TEXT, onchange=set_player_1_name)
-multiplayer_menu.add.text_input("Opponent:  ", default="Player 2", maxchar=8, input_type=pygame_menu.locals.INPUT_TEXT, onchange=set_player_2_name)
+multiplayer_menu.add.text_input("Opponent:  "    , default="Player 2", maxchar=8, input_type=pygame_menu.locals.INPUT_TEXT, onchange=set_player_2_name)
 
 first = [("X", 3),
          ("O", 2),

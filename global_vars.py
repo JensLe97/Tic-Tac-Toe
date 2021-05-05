@@ -40,3 +40,6 @@ def init():
 
     global board
     board = np.zeros((3, 3))
+
+    global sound_on
+    sound_on = False
