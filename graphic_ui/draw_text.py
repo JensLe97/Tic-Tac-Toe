@@ -34,7 +34,8 @@ def draw_winner_name(winner, screen, rect):
     screen.blit(img, (rect.x + (rect.width - img.get_width()) // 2, rect.y + (rect.height - img.get_height()) // 2))
 
 def draw_scores(screen, rect, first_player):
-    scores = font.render(f" {gv.player_name_1}: {gv.player_score_1}      {gv.player_name_2}: {gv.player_score_2}", True, TEXT_COLOR)
+    score_player_1 = font.render(f" {gv.player_name_1}: {gv.player_score_1}", True, TEXT_COLOR)
+    score_player_2 = font.render(f" {gv.player_name_2}: {gv.player_score_2}", True, TEXT_COLOR)
     if first_player:
         font.set_underline(True)
         x_sym = font.render("X", True, gv.colors[0])
@@ -46,6 +47,8 @@ def draw_scores(screen, rect, first_player):
         font.set_underline(False)
         x_sym = font.render("X", True, gv.colors[0])
 
-    screen.blit(scores, (rect.x + (rect.width - scores.get_width()) // 2, rect.y + (rect.height - scores.get_height()) // 2))
-    screen.blit(x_sym, (rect.x - x_sym.get_width() + (rect.width - scores.get_width()) // 2, rect.y + (rect.height - scores.get_height()) // 2))
-    screen.blit(o_sym, (rect.x + rect.width // 2, rect.y + (rect.height - scores.get_height()) // 2))
+    score_y = rect.y + (rect.height - score_player_1.get_height()) // 2
+    screen.blit(score_player_1, (rect.x - rect.width                                                 , score_y))
+    screen.blit(score_player_2, (rect.x + rect.width - score_player_2.get_width()                    , score_y))
+    screen.blit(x_sym,          (rect.x - rect.width                              - x_sym.get_width(), score_y))
+    screen.blit(o_sym,          (rect.x + rect.width - score_player_2.get_width() - o_sym.get_width(), score_y))

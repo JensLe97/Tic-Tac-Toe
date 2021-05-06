@@ -21,7 +21,7 @@ back_button =   pygame.Rect(WIDTH // 1.11 - BACK_BUTTON_WIDTH // 2, HEIGHT // 20
 reset_button =  pygame.Rect(WIDTH // 10 - BACK_BUTTON_WIDTH // 2, HEIGHT // 20 - BACK_BUTTON_HEIGHT // 2, BACK_BUTTON_WIDTH, BACK_BUTTON_HEIGHT)
 
 winner_text =   pygame.Rect(WIDTH // 2 - BUTTON_WIDTH // 2, HEIGHT // 3 - BUTTON_HEIGHT // 2, BUTTON_WIDTH, BUTTON_HEIGHT)
-scores_text =   pygame.Rect(WIDTH // 2 - SCORE_WIDTH // 2, HEIGHT - SCORE_MARGIN - SCORE_HEIGHT // 2, SCORE_WIDTH, SCORE_HEIGHT)
+scores_text =   pygame.Rect(WIDTH // 2, HEIGHT - SCORE_MARGIN - SCORE_DIST_HEIGHT // 2, SCORE_DIST_WIDTH, SCORE_DIST_HEIGHT)
 
 def draw_window(first_player):
     screen.blit(bg_image, (0, 0))
