@@ -79,6 +79,7 @@ def draw_winner_line(board):
     winner_color = gv.colors[0] if solved(line, 1) else gv.colors[1] if solved(line, 2) else None
     if winner_color:
         pygame.draw.line(screen, winner_color, (MARGIN, MARGIN), (MARGIN + size * SQUARE_SIZE, MARGIN + size * SQUARE_SIZE), CROSS_WIDTH)
+        return
     
     line = np.array([board[2][0], board[1][1], board[0][2]])
     winner_color = gv.colors[0] if solved(line, 1) else gv.colors[1] if solved(line, 2) else None
@@ -216,7 +217,7 @@ def play_gui(single_mode):
 
             draw_winner_name(gv.winner_name + " wins!" if gv.hasWinner else "Tie!", screen, winner_text)
             draw_button("Play Again", screen, replay_button)
-            if gv.level == 4 or check_clicked(replay_button):
+            if gv.level == 4 and single_mode or check_clicked(replay_button):
                 if gv.level != 4 and gv.sound_on:
                     pygame.mixer.Sound.play(CLICK)
                 play_gui(single_mode)
