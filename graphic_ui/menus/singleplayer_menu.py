@@ -63,4 +63,5 @@ singleplayer_menu.add.selector(title="Colors:  ", items=colors, onchange=set_col
 
 # Start Game with singleplayer = True
 singleplayer_menu.add.button("Play", play_gui, True)
+singleplayer_menu.add.label("")
 singleplayer_menu.add.button('Back', pygame_menu.events.BACK)

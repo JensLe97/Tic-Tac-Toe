@@ -26,4 +26,5 @@ options_menu = pygame_menu.Menu("Options", WIDTH, HEIGHT, theme=THEME)
 
 options_menu.add.toggle_switch('Sound Effects  ', False, onchange=set_sound)
 options_menu.add.toggle_switch('Music  ', False, onchange=set_music)
+options_menu.add.label("")
 options_menu.add.button('Back', pygame_menu.events.BACK)

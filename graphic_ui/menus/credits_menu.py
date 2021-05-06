@@ -4,4 +4,5 @@ import pygame_menu
 
 credits_menu = pygame_menu.Menu("Credits", WIDTH, HEIGHT, theme=THEME)   
 
+credits_menu.add.label("Developer:\nJens Lemke\n \nSpecial Thanks:\nLilly Warzecha\n ")
 credits_menu.add.button('Back', pygame_menu.events.BACK)

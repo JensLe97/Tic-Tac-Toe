@@ -39,4 +39,5 @@ multiplayer_menu.add.selector(title="Colors:  ", items=colors, onchange=set_colo
 
 # Start Game with singleplayer = False
 multiplayer_menu.add.button("Play", play_gui, False)
+multiplayer_menu.add.label("")
 multiplayer_menu.add.button('Back', pygame_menu.events.BACK)
