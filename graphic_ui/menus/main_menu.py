@@ -11,7 +11,7 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 menu = pygame_menu.Menu("Tic Tac Toe", WIDTH, HEIGHT, theme=THEME)
 
 # Setup background music
-pygame.mixer.music.load("sounds/intro.mp3")
+pygame.mixer.music.load("sounds/almost_bliss.mp3")
 # Play from beginning and repeat
 pygame.mixer.music.play(-1, 0.0)
 pygame.mixer.music.set_volume(0.4)

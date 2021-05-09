@@ -28,8 +28,8 @@ def draw_window(first_player):
     draw_board()
     draw_symbols()
     draw_scores(screen, scores_text, first_player)
-    draw_button("Back", screen, back_button)
-    draw_button("New", screen, reset_button)
+    draw_button("Menu", screen, back_button)
+    draw_button("Reset", screen, reset_button)
 
 def draw_board():
     size = gv.board.shape[0]
